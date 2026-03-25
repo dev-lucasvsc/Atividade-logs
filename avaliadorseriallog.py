@@ -31,9 +31,6 @@ def consolidar_resultados(resultados):
         "contagem": contagem_global
     }
 
-# ===============================
-# Processamento de arquivo
-# ===============================
 def processar_arquivo(caminho):
     with open(caminho, "r", encoding="utf-8") as f:
         conteudo = f.readlines()
@@ -69,10 +66,6 @@ def processar_arquivo(caminho):
         "contagem": contagem
     }
 
-# ===============================
-# Função Worker (Consumidor)
-# ===============================
-# A função precisa ficar aqui fora para o multiprocessing funcionar no Windows
 def worker(tq, rq):
     while True:
         caminho_arq = tq.get()
@@ -89,23 +82,19 @@ def executar_paralelo(pasta, num_processos):
     resultados = []
     inicio = time.time()
     
-    # Filas para o modelo produtor-consumidor com buffer limitado (maxsize=50)
     task_queue = Queue(maxsize=50) 
     result_queue = Queue()
 
-    # Iniciando os consumidores (Workers)
     trabalhadores = []
     for _ in range(num_processos):
         p = Process(target=worker, args=(task_queue, result_queue))
         p.start()
         trabalhadores.append(p)
 
-    # Produtor: lendo os nomes dos arquivos e enviando o caminho completo para a fila
     arquivos_pasta = os.listdir(pasta)
     for arquivo in arquivos_pasta:
         task_queue.put(os.path.join(pasta, arquivo))
 
-    # Enviando sinal de parada para os consumidores
     for _ in range(num_processos):
         task_queue.put(None)
 
