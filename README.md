@@ -144,15 +144,3 @@ O paralelismo com `multiprocessing` funcionou muito bem para o processamento de 
 Ao contrário de tarefas simples como somar números, o processamento de arquivos tem um custo computacional maior por unidade de trabalho — leitura de disco, parsing de texto e contagem de palavras-chave — o que justifica bem o uso de múltiplos processos e resulta em ganhos expressivos de desempenho.
 
 ---
-
-## Como executar
-
-```bash
-python benchmark_multiprocessing.py ./logs/
-```
-
-Ou sem argumento (o programa vai pedir o caminho):
-
-```bash
-python benchmark_multiprocessing.py
-```
